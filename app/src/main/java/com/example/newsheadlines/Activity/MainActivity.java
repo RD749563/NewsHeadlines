@@ -1,28 +1,16 @@
 package com.example.newsheadlines.Activity;
 
 import android.content.Context;
-import android.content.Intent;
-import android.support.annotation.MainThread;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.View;
 
+import com.example.newsheadlines.BuildConfig;
+import com.example.newsheadlines.R;
 import com.example.newsheadlines.Utils.ApplicationInstance;
 import com.example.newsheadlines.adapter.Mainarticleadapter;
-
-import okhttp3.Cache;
-import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-
-import com.example.newsheadlines.R;
 import com.example.newsheadlines.models.Article;
 import com.example.newsheadlines.models.responsemodel;
 import com.example.newsheadlines.rests.APIinterface;
@@ -32,12 +20,18 @@ import com.example.newsheadlines.rests.network.ResponseCacheInterceptor;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
+
+import okhttp3.Cache;
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
-    private final String API_KEY="991f610ab7dc4e349d2315de5c8ce7be";
+    private final String API_KEY= BuildConfig.NEWS_API_KEY;
     private RecyclerView recyclerView;
     private String TAG=this.getClass().getSimpleName();
     private LinearLayoutManager layoutManager;
@@ -52,8 +46,15 @@ public class MainActivity extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         mcontext=this;
+        loadJSON();
+    }
 
-        APIinterface apIinterface= Apiclient.getClient(this).create(APIinterface.class);
+
+
+    public void loadJSON(){
+
+        gethttpclient();
+        APIinterface apIinterface= Apiclient.getClient(gethttpclient()).create(APIinterface.class);
         Call<responsemodel> call= apIinterface.getHeadlines("the-times-of-india",API_KEY);
         call.enqueue(new Callback<responsemodel>() {
             @Override
@@ -73,6 +74,22 @@ public class MainActivity extends AppCompatActivity {
                 Log.e("out",t.toString());
             }
         });
-
     }
+
+    //httpclientbuilder
+
+    public OkHttpClient.Builder gethttpclient(){
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+
+        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+        httpClient.addNetworkInterceptor(new ResponseCacheInterceptor());
+        httpClient.addInterceptor(new OfflineResponseCacheInterceptor());
+        httpClient.cache(new Cache(new File(ApplicationInstance.getApplicationInstance().getCacheDir(), "ResponsesCache"), 10 * 1024 * 1024));
+        httpClient.readTimeout(60, TimeUnit.SECONDS);
+        httpClient.connectTimeout(60, TimeUnit.SECONDS);
+        httpClient.addInterceptor(logging);
+        return httpClient;
+    }
+
 }

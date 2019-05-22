@@ -17,10 +17,8 @@ import com.example.newsheadlines.R;
 
 public class WebActivity extends AppCompatActivity {
     WebView webView;
-    private float m_downX;
     ProgressBar progressBar;
     String url;
-    public static final String TITLE_WEBVIEW_KEY = "save_text_webView";
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,7 +61,6 @@ public class WebActivity extends AppCompatActivity {
         webView.clearCache(true);
         webView.clearHistory();
         webView.getSettings().setDomStorageEnabled(true);
-
         webView.getSettings().setJavaScriptEnabled(true);
         webView.setHorizontalScrollBarEnabled(false);
     }

@@ -1,31 +1,22 @@
 package com.example.newsheadlines.rests;
 
-import android.content.Context;
-
-import java.util.concurrent.TimeUnit;
-
 import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Apiclient {
-    public static final String Base_URL="http://newsapi.org/v2/";
     private static Retrofit retrofit = null;
+    private static String BASE_URL="https://newsapi.org/v2/";
 
-    public static Retrofit getClient(final Context context) {
-        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        if (retrofit==null) {
-            OkHttpClient ok=new OkHttpClient.Builder()
-                    .addInterceptor(interceptor)
-                    .build();
+    public static Retrofit getClient(OkHttpClient.Builder httpClient) {
+        if (retrofit == null) {
             retrofit = new Retrofit.Builder()
-                    .baseUrl(Base_URL)
+                    .baseUrl(BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create())
-                    .client(ok.newBuilder().connectTimeout(30, TimeUnit.SECONDS).readTimeout(30, TimeUnit.SECONDS).writeTimeout(30, TimeUnit.SECONDS).build())
+                    .client(httpClient.build())
                     .build();
         }
         return retrofit;
     }
 }
+
