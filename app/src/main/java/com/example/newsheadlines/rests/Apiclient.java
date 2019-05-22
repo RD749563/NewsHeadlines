@@ -10,7 +10,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Apiclient {
-    public static final String Base_URL="https://newsapi.org/v2/";
+    public static final String Base_URL="http://newsapi.org/v2/";
     private static Retrofit retrofit = null;
 
     public static Retrofit getClient(final Context context) {
