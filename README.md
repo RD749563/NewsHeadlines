@@ -1,5 +1,5 @@
 # News Headlines
--Get recent headlines using NewsAPI
+- Get recent headlines using NewsAPI
 
 ## Description
 
@@ -7,6 +7,6 @@
 - From the official NEWS API(https://newsapi.org)
 
 ## What I've learned :
--Fetching JSON data and parsing it.
--Working with libraries like Retrofit and GSON
--Loading images using GLIDE
+- Fetching JSON data and parsing it.
+- Working with libraries like Retrofit and GSON
+- Loading images using GLIDE
