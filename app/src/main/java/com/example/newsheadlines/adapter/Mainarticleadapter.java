@@ -48,7 +48,7 @@ public class Mainarticleadapter extends RecyclerView.Adapter<Mainarticleadapter.
                 .load(marticlelist.get(i).getUrlToImage())
                 .thumbnail(0.1f)
                 .centerCrop()
-                .error(R.drawable.ic_launcher_background)
+                .error(R.drawable.ic_placeholder)
                 .into(viewHolder.imgview);
 
         Animation animation= AnimationUtils.loadAnimation(mcontext,R.anim.item_fall_down);
